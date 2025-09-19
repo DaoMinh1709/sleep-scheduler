@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sleep Scheduler</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: #0d1b2a;
+      color: #e0e1dd;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 8px;
+      border: none;
+    }
+    button {
+      background: #1b263b;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #415a77;
+    }
+    .results {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sleep Scheduler 😴</h1>
+  <p>Enter the time you want to wake up:</p>
+  <input type="time" id="wakeTime">
+  <button onclick="calculateSleepTimes()">Get Sleep Times</button>
+
+  <div class="results" id="results"></div>
+
+  <script>
+    function calculateSleepTimes() {
+      const wakeTimeInput = document.getElementById("wakeTime").value;
+      if (!wakeTimeInput) {
+        alert("Please enter a wake-up time!");
+        return;
+      }
+
+      let [hours, minutes] = wakeTimeInput.split(":").map(Number);
+      let wakeDate = new Date();
+      wakeDate.setHours(hours, minutes, 0);
+
+      let results = [];
+      for (let cycles = 6; cycles >= 3; cycles--) {
+        let sleepTime = new Date(wakeDate.getTime() - cycles * 90 * 60000);
+        results.push(
+          sleepTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+        );
+      }
+
+      document.getElementById("results").innerHTML =
+        "<h3>You should go to sleep at:</h3><ul>" +
+        results.map(time => `<li>${time}</li>`).join("") +
+        "</ul>";
+    }
+  </script>
+</body>
+</html>
